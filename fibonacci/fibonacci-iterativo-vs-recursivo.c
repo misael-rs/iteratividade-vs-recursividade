@@ -8,21 +8,31 @@ int main(void) {
 	int enesimo = 46;
 	double tempo;
 
+	FILE *arquivo;
+	arquivo = fopen("resultados-fibonacci.csv", "w");
+	fprintf(arquivo, "n, Tempo Iterativo, Tempo Recursivo, f(n)\n");
+
+	int iterativo, recursivo;
 	for(int i=1; i<=enesimo; i++) {
+		fprintf(arquivo, "%d, ", i);
+
 		clock_t tInicioIterativo = clock();
-		printf("Iterativo: f(%d)=%d ", i, fibonacciIterativo(i));
+		iterativo = fibonacciIterativo(i);
 		clock_t tFimIterativo = clock();
 		tempo = (double)(tFimIterativo - tInicioIterativo)/CLOCKS_PER_SEC;
-		printf("(t=%.3f seg.)\n", tempo);
+		fprintf(arquivo, "%.3f, ", tempo);
+		printf("Iterativo: f(%d)=%d (t=%.3f seg.)\n", i, iterativo, tempo);
 
 		clock_t tInicioRecursivo = clock();
-		printf("Recursivo: f(%d)=%d ", i, fibonacciRecursivo(i));
+		recursivo = fibonacciRecursivo(i);
 		clock_t tFimRecursivo = clock();
 		tempo = (double)(tFimRecursivo - tInicioRecursivo)/CLOCKS_PER_SEC;
-		printf("(t=%.3f seg.)\n", tempo);
+		fprintf(arquivo, "%.3f, %d\n", tempo, iterativo);
+		printf("Recursivo: f(%d)=%d (t=%.3f seg.)\n", i, recursivo, tempo);
 
 		printf("---\n");
 	}
+	fclose(arquivo);
 
 	return 0;
 }

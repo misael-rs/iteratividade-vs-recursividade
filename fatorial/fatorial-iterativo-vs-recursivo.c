@@ -7,21 +7,30 @@ unsigned long fatorialRecursivo(const unsigned long n);
 int main(void) {
 	double tempo;
 
+	FILE *arquivo;
+	arquivo = fopen("resultados-fatorial.csv", "w");
+	fprintf(arquivo, "n, Tempo Iterativo, Tempo Recursivo, n!\n");
+
+	unsigned long iterativo, recursivo;
 	for(int i=0; i<=20; i++) {
+		fprintf(arquivo, "%d, ", i);
+
 		clock_t tIteIni = clock();
-		printf("Iterativo: %d! = %ld ", i, fatorialIterativo(i));
+		iterativo = fatorialIterativo(i);
 		clock_t tIteFim = clock();
 		tempo = (double)(tIteFim - tIteIni)/CLOCKS_PER_SEC;
-		printf("(t=%f sec.)\n", tempo);
+		fprintf(arquivo, "%f, ", tempo);
+		printf("Iterativo: %d! = %ld (t=%f sec.)\n", i, iterativo, tempo);
 
 		clock_t tRecIni = clock();
-		printf("Recursivo: %d! = %ld ", i, fatorialRecursivo(i));
+		recursivo = fatorialRecursivo(i);
 		clock_t tRecFim = clock();
 		tempo = (double)(tRecFim - tRecIni)/CLOCKS_PER_SEC;
-		printf("(t=%f sec.)\n", tempo);
+		fprintf(arquivo, "%f, %ld\n", tempo, iterativo);
+		printf("Recursivo: %d! = %ld (t=%f sec.)\n", i, recursivo, tempo);
 		printf("--\n");
 	}
-
+	fclose(arquivo);
 	return 0;
 }
 
